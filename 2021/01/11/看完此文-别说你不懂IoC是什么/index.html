@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>看完此文,别说你不懂IoC是什么? | Baoxing 的个人站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="盆友圈都在晒十八岁，真羡慕你们可以发18岁的照片，我还要再等两年才能发。哎~惆怅..  前言很多小伙伴会对Spring的IoC有些疑惑,什么是控制反转?我为何要使用IoC 把控制权交给容器这样对我有什么好处?书上只讲理论, 我现在都不能体会Spring的IoC用于不用相比有什么好处,由spring托管有什么好处呢？我现在感觉用spring 的set注入就是看起来代码NB点，完全不理解到底有什么优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="看完此文,别说你不懂IoC是什么?">
+<meta property="og:url" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/index.html">
+<meta property="og:site_name" content="Baoxing 的个人站">
+<meta property="og:description" content="盆友圈都在晒十八岁，真羡慕你们可以发18岁的照片，我还要再等两年才能发。哎~惆怅..  前言很多小伙伴会对Spring的IoC有些疑惑,什么是控制反转?我为何要使用IoC 把控制权交给容器这样对我有什么好处?书上只讲理论, 我现在都不能体会Spring的IoC用于不用相比有什么好处,由spring托管有什么好处呢？我现在感觉用spring 的set注入就是看起来代码NB点，完全不理解到底有什么优">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/01.png">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/02.png">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/03.png">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/04.jpg">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/05.png">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/06.jpg">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/07.jpg">
+<meta property="og:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/PoXing.jpg">
+<meta property="article:published_time" content="2021-01-11T14:41:14.000Z">
+<meta property="article:modified_time" content="2021-01-11T15:21:20.332Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Baoxing 的个人站" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Baoxing 的个人站</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">微信公众号: 【PoXing】</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://bd3star.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-看完此文-别说你不懂IoC是什么" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/" class="article-date">
+  <time class="dt-published" datetime="2021-01-11T14:41:14.000Z" itemprop="datePublished">2021-01-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      看完此文,别说你不懂IoC是什么?
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>盆友圈都在晒十八岁，<br>真羡慕你们可以发18岁的照片，我还要再等两年才能发。哎~惆怅..</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多小伙伴会对Spring的IoC有些疑惑,什么是控制反转?<br>我为何要使用IoC 把控制权交给容器这样对我有什么好处?<br>书上只讲理论, 我现在都不能体会Spring的IoC用于不用相比有什么好处,<br>由spring托管有什么好处呢？<br>我现在感觉用spring 的set注入就是看起来代码NB点，<br>完全不理解到底有什么优势啊……<br>基于如上让你彻底搞定理解IoC,从此不再困惑</p>
+<p>废话不多说(正文依旧有),我们开始吧!</p>
+<h2 id="原生Servlet"><a href="#原生Servlet" class="headerlink" title="原生Servlet"></a>原生Servlet</h2><p>我们先从原生Servlet时代的三层架构(MVC)开始切入</p>
+<h3 id="创建maven工程-引入依赖"><a href="#创建maven工程-引入依赖" class="headerlink" title="创建maven工程 引入依赖"></a>创建maven工程 引入依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javax.servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="创建测试"><a href="#创建测试" class="headerlink" title="创建测试"></a>创建测试</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebServlet(urlPatterns = &quot;/poXing&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PoXingServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        response.getWriter().println(<span class="string">&quot;PoXingServlet run ......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="浏览器访问"><a href="#浏览器访问" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><p>访问路径<br><a target="_blank" rel="noopener" href="http://localhost:8080/spring-framework-ioc-learning/poXing">http://localhost:8080/spring-framework-ioc-learning/poXing</a><br>(<a href="http://ip:端口号/[context-path(默认是工程名称可以自行修改)]/uri">http://ip:端口号/[context-path(默认是工程名称可以自行修改)]/uri</a>)</p>
+<p>浏览器可输出 <code>PoXingServlet run ......</code>  此时已完成基础Servlet</p>
+<h3 id="进一步优化-添加-Service-和-Dao"><a href="#进一步优化-添加-Service-和-Dao" class="headerlink" title="进一步优化 添加 Service 和 Dao"></a>进一步优化 添加 Service 和 Dao</h3><blockquote>
+<p>这里为演示简单 并未引入输入库相关依赖 故此处 Dao 只是模拟有数据库的存在,<br>不深入</p>
+</blockquote>
+<p>工程目录创建以下类与接口</p>
+<p><img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/01.png" alt="目录截图"></p>
+<p>三层架构中组件与依赖应如下图所示</p>
+<p><img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/02.png" alt="关系图"></p>
+<h4 id="添加Dao"><a href="#添加Dao" class="headerlink" title="添加Dao"></a>添加Dao</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IDemoDao</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoDaoImpl</span> <span class="keyword">implements</span> <span class="title">IDemoDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 此处为演示方便不连接数据库 模拟返回数据库list结果</span></span><br><span class="line">        <span class="keyword">return</span> Arrays.asList(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;ccc&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="添加Service"><a href="#添加Service" class="headerlink" title="添加Service"></a>添加Service</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IDemoService</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title">IDemoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IDemoDao demoDao = <span class="keyword">new</span> DemoDaoImpl();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> demoDao.findAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="修改DemoServlet"><a href="#修改DemoServlet" class="headerlink" title="修改DemoServlet"></a>修改DemoServlet</h4><p>将我们前面创建的 <code>PoXingServlet</code> 内容拷贝 并加以修改</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebServlet(urlPatterns = &quot;/demoServlet&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    IDemoService demoService = <span class="keyword">new</span> DemoServiceImpl();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        resp.getWriter().println(demoService.findAll().toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h4><p>访问路径<br><a target="_blank" rel="noopener" href="http://localhost:8080/spring-framework-ioc-learning/demoServlet">http://localhost:8080/spring-framework-ioc-learning/demoServlet</a><br>(<a href="http://ip:端口号/[context-path(默认是工程名称可以自行修改)]/uri">http://ip:端口号/[context-path(默认是工程名称可以自行修改)]/uri</a>)</p>
+<p>浏览器可输出 <code>[&#39;aaa&#39;, &#39;bbb&#39;, &#39;ccc&#39;]</code>  此时已完成基础Servlet</p>
+<p>基础搭建工作完成,下面才是<strong>我们的重点! 我们的重点!! 我们的重点!!!</strong></p>
+<h3 id="好吧-需求开始变更"><a href="#好吧-需求开始变更" class="headerlink" title="好吧 需求开始变更"></a>好吧 需求开始变更</h3><p>现在你已经完成了开发工作,数据库使用的Mysql<br>增删改查都以实现(你就当做已经实现了…虽然我并没有写增删改)<br>项目马上交付,此时你的领导(XX领导完全不懂技术)电话da来了.</p>
+<blockquote>
+<p>那个谁谁谁  最新我听说大公司都用Oracle数据库<br>客户好像都觉得Oracle数据库更靠谱呢<br>这样吧, 你也给我换成Oracle数据库</p>
+</blockquote>
+<p>此时你的内心应该是这样的 XX领导, XX不干了,</p>
+<p><img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/03.png" alt="不乐意">  <img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/04.jpg" alt="都是我的错行了吧">   <img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/05.png" alt="我滚了"> <img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/06.jpg" alt="跪着走完自己选择的路"></p>
+<p>木头办法哎, 找下家太麻烦, 当前还是要恰饭的, 服从吧  咱小咱卑微 咱是干饭人 咱的错<br>咱改</p>
+<h4 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h4><p>对于数据库的切换  我们知道  不仅要修改数据库连接池等相关的配置 还要修改<br>相应的SQL语句(特定的SQL对于不同的数据库写法是不一样滴,分页就不一样), 咋办?<br>改Dao层吧 于是乎 开始修改项目里所有的Dao实现类 也就是DaoImpl</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoDaoImpl</span> <span class="keyword">implements</span> <span class="title">IDemoDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 此处为演示方便不连接数据库 模拟返回数据库list结果</span></span><br><span class="line"><span class="comment">//        return Arrays.asList(&quot;aaa&quot;, &quot;bbb&quot;, &quot;ccc&quot;);</span></span><br><span class="line">        <span class="comment">// 模拟修改成了Orcale的SQL的语句了</span></span><br><span class="line">        <span class="keyword">return</span> Arrays.asList(<span class="string">&quot;xx领导(Oracle数据库)&quot;</span>, <span class="string">&quot;xx领导(Oracle数据库)&quot;</span>, <span class="string">&quot;xx领导(Oracle数据库)&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>哈哈 全部检查一遍  自动化测试也执行完  没毛病  搜易贼…<br>可以摸鱼了…</p>
+<h3 id="嘟嘟嘟-需求再次变更"><a href="#嘟嘟嘟-需求再次变更" class="headerlink" title="嘟嘟嘟  需求再次变更"></a>嘟嘟嘟  需求再次变更</h3><p>项目终于改完要交付了, 干了杯枸杞红枣茶, 摸鱼准备下班中…</p>
+<blockquote>
+<p>那个那个那个啥…  怎么Oracle数据库要花钱？？？ 公司最近客户还没有回款<br>你把数据库还是换回MySQL吧 后面等客户给回款了我们再考虑用Oracle</p>
+</blockquote>
+<p>此时的你…</p>
+<p><img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/07.jpg" alt="逐渐起了杀心"></p>
+<p>哎 再一再二  我想大概也会有再三吧 整吧 这次我要想想办法了<br>我把你的再三再四直接给你弄上  省的影响我摸鱼.</p>
+<h4 id="引入静态工厂"><a href="#引入静态工厂" class="headerlink" title="引入静态工厂"></a>引入静态工厂</h4><p>我要创建一个静态工厂, 你想要啥数据库我给你整出来一个啥数据来<br>这里暂时起名<code>BeanFactory</code> 别问为啥 我就想起这个名 我卑微我任性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IDemoDao <span class="title">getDemoDao</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 返回 mysql 的 Dao</span></span><br><span class="line">        <span class="comment">// return new DemoDaoImpl();</span></span><br><span class="line">        <span class="comment">// 返回 oracle 的 Dao</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DemoOracleDaoImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="改造Service实现即-ServiceImpl"><a href="#改造Service实现即-ServiceImpl" class="headerlink" title="改造Service实现即 ServiceImpl"></a>改造Service实现即 ServiceImpl</h4><p>ServiceImpl 中引用的 Dao 不再可以是手动 new 出来的了,<br>而应该由 <code>BeanFactory</code> 的静态方法返回来获得</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title">IDemoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    private IDemoDao demoDao = new DemoDaoImpl();</span></span><br><span class="line">    <span class="keyword">private</span> IDemoDao demoDao = BeanFactory.getDemoDao();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> demoDao.findAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>好了 即使你再发生变更(改回Oracle) 也不会影响我摸鱼了<br>我只是改改<strong>BeanFactory中的静态方法而已</strong></p>
+<p>现在终于可以交付项目了, 终于…..</p>
+<p>抱歉(并不是你心里所想的会出啥事) 一切顺利 老板满意 客户满意<br>开会要给你先画个饼 鼓励一下咯</p>
+<h3 id="又出现了新的问题"><a href="#又出现了新的问题" class="headerlink" title="又出现了新的问题"></a>又出现了新的问题</h3><p>系统已经上线运行  这个时候你已经着手进行下一个项目了,<br>可是..可是 领导觉得你的任务最近不多呀 提出让你对上一个项目进行优化<br>和扩展的需求, 这时候你再次打开了旧项目 居然发现项目编译不通过. 此处为了<br>演示编译无法通过,删除<code>DemoDaoImpl.java</code></p>
+<p>此时你的脑海里一定在翻滚,为么为么为么之前好好的,机器也没换啊,找到编译<br>出错的类<code>BeanFactory</code>,我x, 我的类去哪儿了,去哪儿了,去哪儿了,三连问之后<br>少了<code>DemoDaoImpl.java</code>  导致无法编译</p>
+<h4 id="依赖关系导致紧耦合"><a href="#依赖关系导致紧耦合" class="headerlink" title="依赖关系导致紧耦合"></a>依赖关系导致紧耦合</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IDemoDao <span class="title">getDemoDao</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 返回 mysql 的 Dao</span></span><br><span class="line">        <span class="comment">// 因为 DemoDaoImpl.java不存在导致编译失败</span></span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> DemoDaoImpl();</span><br><span class="line">        <span class="comment">// 返回 oracle 的 Dao</span></span><br><span class="line"><span class="comment">//        return new DemoOracleDaoImpl();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>BeanFactory</code>类中因 <code>DemoDaoImpl.java</code> 的不存在 而报红, 导致编译没法通过<br>像当前 <code>BeanFactory</code> <strong>强依赖于</strong> <code>DemoDaoImpl</code> (没有<code>DemoDaoImpl</code>就报红给你看)<br>这就是<strong>紧耦合</strong></p>
+<h4 id="解决紧耦合"><a href="#解决紧耦合" class="headerlink" title="解决紧耦合"></a>解决紧耦合</h4><p>没有这个Java文件  我没法干活呀 要不我自己造一个空的？？？ 不行不行<br>万一明天 <code>DemoOracleDaoImpl</code> 这个又没有了呢, 我不能总造空的玩呀<br>突然此时 你灵光一现 好像 好像 反射大概似乎可能也许可以解决这个问题呢<br><strong>反射可以声明一个类的全限定类名,进而获取它的字节码,这样也可以构造一个对象</strong></p>
+<p>于是乎 开干吧 <code>BeanFactory</code> 就成这样的了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IDemoDao <span class="title">getDemoDao</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> (IDemoDao) Class.forName(<span class="string">&quot;com.huodd.dao.impl.DemoDaoImpl&quot;</span>).newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;IDemoDao instantiation error, cause: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>现在编译问题得以解决,虽然 <code>DemoService</code>在初始化的时候 还有有问题 但是整个项目<br>起码不会无法编译了</p>
+<h4 id="弱依赖的引入"><a href="#弱依赖的引入" class="headerlink" title="弱依赖的引入"></a>弱依赖的引入</h4><p>当前使用了反射 编译通过 但是工程启动后 由于<code>BeanFactory</code> 要构造 <code>DemoDaoImpl</code><br>时确实还没有该类,所以会抛出<code>ClassNotFoundException</code><br>但是此时的<code>BeanFactory</code>对<code>DemoDaoImpl</code> 的依赖程度(你愿意丢你就丢 别影响我编译)<br>就算的上是 <strong>弱依赖</strong>了</p>
+<h4 id="硬编码"><a href="#硬编码" class="headerlink" title="硬编码"></a>硬编码</h4><p>弱依赖的完成 你找遍电脑的各个盘 终于把 <code>DemoDaoImpl.java</code> 该类给找回来了,这下一切OK<br>不影响编译了,不影响运行了,但是好像还哪里不大对呢, 要是再切换数据库呢, 我在工厂类里面<br>写死了全限定类名,切换数据库的时候我还得去重新编译一遍工程才可以正常运行,<br>应该还可以有办法. 可以考虑下.</p>
+<h4 id="引入外部化的配置文件"><a href="#引入外部化的配置文件" class="headerlink" title="引入外部化的配置文件"></a>引入外部化的配置文件</h4><p>机智如你呀,终究被你想到了<strong>利用IO实现文件的存储配置</strong>  每次<code>BeanFactory</code><br>被初始化时 就让他去读取<strong>配置文件</strong>就好了 我下次就改改配置文件就行了<br>硬编码问题得以解决</p>
+<h5 id="factory-properties-创建"><a href="#factory-properties-创建" class="headerlink" title="factory.properties 创建"></a>factory.properties 创建</h5><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">demoDao</span>=<span class="string">com.huodd.dao.impl.DemoDaoImpl</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>为方便取到全限定类名,前面是我们给类起的一个”<strong>别名</strong>“(类似于mybatis的xml中的alias思想)<br>这样后面可以直接通过 “<strong>别名找到对应类的全限定名</strong>“</p>
+<h5 id="BeanFactory-改造"><a href="#BeanFactory-改造" class="headerlink" title="BeanFactory 改造"></a>BeanFactory 改造</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Properties properties;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用静态代码块初始化properties，加载factord.properties文件</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        properties = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 必须使用类加载器读取resource文件夹下的配置文件</span></span><br><span class="line">            properties.load(BeanFactory.class.getClassLoader().getResourceAsStream(<span class="string">&quot;factory.properties&quot;</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="comment">// BeanFactory类的静态初始化都失败了，那后续也没有必要继续执行了</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ExceptionInInitializerError(<span class="string">&quot;BeanFactory initialize error, cause: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IDemoDao <span class="title">getDemoDao</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String beanName = properties.getProperty(<span class="string">&quot;demoDao&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class&lt;?&gt; beanClazz = Class.forName(beanName);</span><br><span class="line">            <span class="keyword">return</span> (IDemoDao) beanClazz.newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;BeanFactory have not [&quot;</span> + beanName + <span class="string">&quot;] bean!&quot;</span>, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException | InstantiationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;[&quot;</span> + beanName + <span class="string">&quot;] instantiation error!&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>等等  等等  这里我们好像又把起的那个别名<code>demoDao</code>给写死了,得改 干脆<strong>传参</strong>吧<br>要哪个全限定类名参数传哪个全限定类名对应的别名 此时 <code>getDemoDao</code>这个名字得改还要加参数 此时<br>就叫<code>getBean</code>吧 根据别名获取相应的Bean对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IDemoDao <span class="title">getBean</span><span class="params">(String beanAlias)</span> </span>&#123;</span><br><span class="line">        String beanName = properties.getProperty(<span class="string">&quot;beanAlias&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class&lt;?&gt; beanClazz = Class.forName(beanName);</span><br><span class="line">            <span class="keyword">return</span> (IDemoDao) beanClazz.newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;BeanFactory have not [&quot;</span> + beanName + <span class="string">&quot;] bean!&quot;</span>, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException | InstantiationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;[&quot;</span> + beanName + <span class="string">&quot;] instantiation error!&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="ServiceImpl-改造"><a href="#ServiceImpl-改造" class="headerlink" title="ServiceImpl 改造"></a>ServiceImpl 改造</h5><p><code>DemoServiceImpl</code> 中不能调用 <code>getDao</code> 方法(让我们给改成了<code>getBean(String beanAlias)</code>)了，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title">IDemoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	IDemoDao demoDao = (IDemoDao) BeanFactory.getBean(<span class="string">&quot;demoDao&quot;</span>);</span><br><span class="line">    </span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> demoDao.findAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>到这里，你突然发现一个现象：<br>这下你可以把<strong>所有</strong>想抽取出来的<strong>组件都可以做成外部化配置</strong>了！</p>
+<p>PS: 自行去<code>DemoServlet</code>里面把对<code>DemoServiceImpl</code>的紧耦合改正</p>
+<blockquote>
+<p>算了 简单说一下<br>在 <code>factory.properties</code> 外部配置化文件 加入 <code>demoService=com.huodd.service.impl.DemoServiceImpl</code><br><code>DemoServlet</code>获取<code>DemoServiceImpl</code>改成 <code>IDemoService demoService = (IDemoService) BeanFactory.getBean(&quot;DemoServiceImpl&quot;);</code></p>
+</blockquote>
+<h4 id="外部配置化"><a href="#外部配置化" class="headerlink" title="外部配置化"></a>外部配置化</h4><p>对于这种可能会变化的配置、属性等，通常不会直接硬编码在源代码中，<br>而是抽取为一些配置文件的形式（ properties 、xml 、json 、yml 等），<br>配合程序对配置文件的加载和解析，从而达到动态配置、降低配置耦合的目的。<br>由此大概我们可以知道 原来并不是那些老外拍脑袋随便就乱搞才出来的这个IoC思想</p>
+<h4 id="多重构建问题"><a href="#多重构建问题" class="headerlink" title="多重构建问题"></a>多重构建问题</h4><p>细心的小伙伴可能已经发现 项目还会存在问题 影响性能的问题 也是很大的问题<br>就是<code>BeanFactory#getBean(String beanAlias)</code> 会重复创建同一个对象的多个实例<br>而我们根本就不需要每次都给我去创建新的对象实例,旧的就够用了<br>因此处不是本文重点  小伙伴自行改进  这里给出一个大概的思路</p>
+<blockquote>
+<p>可以考虑引入缓存 将创建出来的实例缓存起来 每次我们从缓存中读取<br>PS: 要多考虑一点哦 别忘了多线程并发问题</p>
+</blockquote>
+<p>到这里,不知道小伙伴是否对IOC有了个全新的认识和理解呢</p>
+<p>这里总结一下里面出现的几个关键点</p>
+<ul>
+<li>静态工厂可将多处依赖进行抽取分离</li>
+<li>外部化配置文件+反射可解决配置的硬编码问题</li>
+<li>缓存可控制对象实例数(这里我们并没有具体去实现小伙伴自行动手哦)</li>
+</ul>
+<p>接下来  是否解决了文章开始时小伙伴们的困惑呢？</p>
+<h2 id="IOC的思想引入"><a href="#IOC的思想引入" class="headerlink" title="IOC的思想引入"></a>IOC的思想引入</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> IDemoDao dao = <span class="keyword">new</span> DemoDaoImpl();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> IDemoDao dao = (IDemoDao) BeanFactory.getBean(<span class="string">&quot;demoDao&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>对比如上两种方法获取<code>dao</code></p>
+<ul>
+<li>前者强依赖/紧耦合 后者弱依赖/松散耦合</li>
+<li>前者需保证<code>DemoDaoImpl</code>存在才能通过编译<br>后者无需保证<code>DemoDaoImpl</code>存在就可以通过编译 倘若<code>factory.properties</code> 中声明的全限定类名出现错误，<br>则会出现<code>ClassCastException </code></li>
+</ul>
+<p>仔细体会下面这种对象获取的方式，本来咱开发者可以使用上面的方式，<br>主动声明实现类，但如果选择下面的方式，<br>那就不再是咱自己去声明，而是将<strong>获取对象的方式交给了</strong><code>BeanFactory</code> 。<br>这种将<strong>控制权交给别人</strong>的思想，就可以称作：<strong>控制反转（ Inverse of Control , IOC ）</strong>。<br>而 BeanFactory 根据指定的 beanName 去获取和创建对象的过程，<br>就可以称作：<strong>依赖查找（ Dependency Lookup , DL ）</strong>。</p>
+<h2 id="源码获取"><a href="#源码获取" class="headerlink" title="源码获取"></a>源码获取</h2><p>本文源代码获取 可添加公众号”PoXing” 回复【IOC】进行获取<br>扫码添加一下吧~~~<br><img src="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/PoXing.jpg" alt="公众号二维码"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://bd3star.github.io/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/" data-id="ckjsotn6i0000hsuv5s5of2q2" data-title="看完此文,别说你不懂IoC是什么?" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/01/11/My-New-Post/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">My New Post</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/01/11/%E7%9C%8B%E5%AE%8C%E6%AD%A4%E6%96%87-%E5%88%AB%E8%AF%B4%E4%BD%A0%E4%B8%8D%E6%87%82IoC%E6%98%AF%E4%BB%80%E4%B9%88/">看完此文,别说你不懂IoC是什么?</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/11/My-New-Post/">My New Post</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/11/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
